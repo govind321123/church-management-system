@@ -1,0 +1,36 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <h4>Edit Household</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit"
+                        class="btn btn-success">
+
+                    Update Household
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

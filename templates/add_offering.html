@@ -1,0 +1,213 @@
+
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="main-content">
+
+    <div class="custom-card">
+
+        <!-- HEADER -->
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h3 class="fw-bold">
+                Add Offering
+            </h3>
+
+            <a href="{% url 'offering_list' %}"
+               class="btn btn-dark">
+
+                <i class="bi bi-arrow-left"></i>
+                Back
+
+            </a>
+
+        </div>
+
+        <!-- FORM -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="row">
+
+                <!-- OFFERING CATEGORY -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+                        Offering Category
+                    </label>
+
+                    <select name="category"
+                            class="form-select">
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        {% for category in categories %}
+
+                        <option value="{{ category.id }}">
+
+                            {{ category.name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <!-- CUSTOM OFFERING -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+                        Special Offering
+                        (Custom Entry)
+                    </label>
+
+                    <input type="text"
+                           name="custom_category"
+                           class="form-control"
+                           placeholder="Example: Youth Camp Offering">
+
+                    <small class="text-muted">
+
+                        Optional:
+                        Add custom offering type if not available above.
+
+                    </small>
+
+                </div>
+
+                <!-- AMOUNT -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+                        Amount
+                    </label>
+
+                    <input type="number"
+                           step="0.01"
+                           name="amount"
+                           class="form-control"
+                           placeholder="Enter amount"
+                           required>
+
+                </div>
+
+                <!-- GIVEN BY -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+                        Given By
+                    </label>
+
+                    <input type="text"
+                           name="given_by"
+                           class="form-control"
+                           placeholder="Optional donor name">
+
+                </div>
+
+                <!-- PAYMENT METHOD -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+                        Payment Method
+                    </label>
+
+                    <select name="payment_method"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Select Payment Method
+                        </option>
+
+                        <option value="Cash">
+                            Cash
+                        </option>
+
+                        <option value="UPI">
+                            UPI
+                        </option>
+
+                        <option value="Bank">
+                            Bank
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- SERVICE DATE -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+                        Service Date
+                    </label>
+
+                    <input type="date"
+                           name="service_date"
+                           class="form-control"
+                           required>
+
+                </div>
+
+                <!-- REMARKS -->
+
+                <div class="col-12 mb-4">
+
+                    <label class="form-label">
+                        Remarks
+                    </label>
+
+                    <textarea name="remarks"
+                              rows="4"
+                              class="form-control"
+                              placeholder="Optional remarks"></textarea>
+
+                </div>
+
+            </div>
+
+            <!-- BUTTONS -->
+
+            <div class="d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Save Offering
+
+                </button>
+
+                <a href="{% url 'offering_list' %}"
+                   class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

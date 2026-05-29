@@ -1,0 +1,348 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Add Birth Record</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial;
+
+            background: #f4f6f9;
+
+        }
+
+        .container {
+
+            width: 500px;
+
+            margin: 40px auto;
+
+            background: white;
+
+            padding: 20px 30px;
+
+            border-radius: 8px;
+
+            box-shadow: 0 0 10px #ccc;
+
+        }
+
+        h2 {
+
+            text-align: center;
+
+            margin-bottom: 20px;
+
+        }
+
+        label {
+
+            font-weight: bold;
+
+        }
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 8px;
+
+            margin: 6px 0 15px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 5px;
+
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 10px;
+
+            background: #28a745;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 5px;
+
+            cursor: pointer;
+
+        }
+
+        button:hover {
+
+            background: #218838;
+
+        }
+
+        .message {
+
+            text-align: center;
+
+            color: green;
+
+            margin-bottom: 15px;
+
+            font-weight: bold;
+
+        }
+
+        .back-btn {
+
+            display: inline-block;
+
+            margin-bottom: 15px;
+
+            text-decoration: none;
+
+            background: #007bff;
+
+            color: white;
+
+            padding: 8px 15px;
+
+            border-radius: 5px;
+
+        }
+
+        .back-btn:hover {
+
+            background: #0056b3;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- BACK BUTTON -->
+
+    <a href="javascript:history.back()"
+       class="back-btn">
+
+        Back
+
+    </a>
+
+    <!-- TITLE -->
+
+    <h2>
+
+        Add Birth Record
+
+    </h2>
+
+    <!-- SUCCESS MESSAGE -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="message">
+
+                {{ message }}
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+    <!-- FORM -->
+
+    <form method="POST"
+          enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <!-- HOUSEHOLD -->
+
+        <p>
+
+            <label>Household</label>
+
+            {{ form.household }}
+
+        </p>
+
+        <!-- BABY NAME -->
+
+        <p>
+
+            <label>Baby Name</label>
+
+            {{ form.name }}
+
+        </p>
+
+        <!-- GENDER -->
+
+        <p>
+
+            <label>Gender</label>
+
+            {{ form.gender }}
+
+        </p>
+
+        <!-- DOB -->
+
+        <p>
+
+            <label>Date of Birth</label>
+
+            {{ form.dob }}
+
+        </p>
+
+        <!-- FATHER NAME -->
+
+        <p>
+
+            <label>Father Name</label>
+
+            {{ form.father_name }}
+
+        </p>
+
+        <!-- MOTHER NAME -->
+
+        <p>
+
+            <label>Mother Name</label>
+
+            {{ form.mother_name }}
+
+        </p>
+
+        <!-- FATHER PHONE -->
+
+        <p>
+
+            <label>Father Phone</label>
+
+            {{ form.father_phone }}
+
+        </p>
+
+        <!-- MOTHER PHONE -->
+
+        <p>
+
+            <label>Mother Phone</label>
+
+            {{ form.mother_phone }}
+
+        </p>
+
+        <!-- RELATIONSHIP -->
+
+        <p>
+
+            <label>Relationship</label>
+
+            {{ form.relationship }}
+
+        </p>
+
+        <!-- CUSTOM RELATIONSHIP -->
+
+        <p id="customRelationshipBox"
+           style="display:none;">
+
+            <label>Custom Relationship</label>
+
+            {{ form.custom_relationship }}
+
+        </p>
+
+        <!-- BAPTISM -->
+
+        <p>
+
+            <label>Baptism Status</label>
+
+            {{ form.baptism_status }}
+
+        </p>
+
+        <!-- CERTIFICATE -->
+
+        <p>
+
+            <label>Birth Certificate</label>
+
+            {{ form.birth_certificate }}
+
+        </p>
+
+        <!-- SUBMIT -->
+
+        <button type="submit">
+
+            Save
+
+        </button>
+
+    </form>
+
+</div>
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+    const relationshipField =
+        document.getElementById(
+            'id_relationship'
+        );
+
+    const customBox =
+        document.getElementById(
+            'customRelationshipBox'
+        );
+
+    function toggleCustomRelationship() {
+
+        if (
+            relationshipField.value === 'Other'
+        ) {
+
+            customBox.style.display = 'block';
+
+        }
+
+        else {
+
+            customBox.style.display = 'none';
+
+        }
+
+    }
+
+    relationshipField.addEventListener(
+        'change',
+        toggleCustomRelationship
+    );
+
+    toggleCustomRelationship();
+
+</script>
+
+</body>
+
+</html>

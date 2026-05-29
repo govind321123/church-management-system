@@ -1,0 +1,100 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between mb-4">
+
+        <h2>Bank Accounts</h2>
+
+        <div class="d-flex gap-2">
+
+            <!-- Back Button -->
+
+            {% comment %} <a href="javascript:history.back()"
+               class="btn btn-secondary">
+
+                ← Back
+
+            </a> {% endcomment %}
+
+            <a href="{% url 'home' %}"
+            class="btn btn-secondary">
+
+                ← Back
+
+            </a>
+
+            <a href="{% url 'add_bank_account' %}"
+               class="btn btn-primary">
+
+                Add Bank Account
+
+            </a>
+
+            <a href="{% url 'add_deposit' %}"
+               class="btn btn-success">
+
+                Deposit
+
+            </a>
+
+            <a href="{% url 'add_withdrawal' %}"
+               class="btn btn-danger">
+
+                Withdrawal
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <table class="table table-bordered">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Account Name</th>
+                        <th>Bank Name</th>
+                        <th>Account Number</th>
+                        <th>IFSC Code</th>
+                        <th>Opening Balance</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for account in accounts %}
+
+                    <tr>
+
+                        <td>{{ account.account_name }}</td>
+                        <td>{{ account.bank_name }}</td>
+                        <td>{{ account.account_number }}</td>
+                        <td>{{ account.ifsc_code }}</td>
+                        <td>{{ account.opening_balance }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

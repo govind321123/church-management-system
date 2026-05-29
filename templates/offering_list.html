@@ -1,0 +1,167 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="main-content">
+
+    <!-- ================= OFFERING TABLE ================= -->
+
+    <div class="custom-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+           <a href="{% url 'home' %}" class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+                Back
+
+            </a>
+
+            <h3 class="fw-bold">
+                Offerings
+            </h3>
+
+            <!--<a href="#" class="btn btn-primary">-->
+
+            <a href="{% url 'add_offering' %}"
+             class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i>
+                Add Offering
+
+            </a>
+
+        </div>
+
+        <!-- ================= TABLE ================= -->
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Given By</th>
+                        <th>Payment Method</th>
+                        <th>Service Date</th>
+                        <th>Remarks</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for offering in offerings %}
+
+                    <tr>
+
+                        <td>
+                            <strong>#{{ offering.id }}</strong>
+                        </td>
+
+                        <td>
+                            {{ offering.category }}
+                        </td>
+
+                        <td>
+                            ₹ {{ offering.amount }}
+                        </td>
+
+
+                        <td>
+                            {{ offering.given_by|default:"-" }}
+                        </td>
+
+                        <td>
+
+                            {% if offering.payment_method == 'Cash' %}
+
+                                <span class="badge bg-success">
+                                    {{ offering.payment_method }}
+                                </span>
+
+                            {% elif offering.payment_method == 'UPI' %}
+
+                                <span class="badge bg-primary">
+                                    {{ offering.payment_method }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-dark">
+                                    {{ offering.payment_method }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ offering.service_date }}
+                        </td>
+
+                        <td>
+                            {{ offering.remarks|default:"-" }}
+                        </td>
+
+
+                        <td>
+
+                        <a href="{% url 'edit_offering' offering.id %}"
+                        class="btn btn-sm btn-primary">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                        </a>
+
+                        <a href="{% url 'delete_offering' offering.id %}"
+                        class="btn btn-sm btn-danger">
+
+                            <i class="bi bi-trash"></i>
+
+                        </a>
+
+                    </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="8" class="text-center py-5">
+
+                            <div class="text-muted">
+
+                                <i class="bi bi-cash-stack fs-1"></i>
+
+                                <p class="mt-2">
+                                    No offering records found
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

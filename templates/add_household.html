@@ -1,0 +1,93 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Household</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="{% static 'assets/css/custom.css' %}">
+</head>
+
+<body class="out-quart">
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <div class="card-header">
+            <h4>Add Household</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <!-- Locality -->
+                <div class="mb-3">
+                    <label class="form-label">Locality</label>
+                    {{ form.locality }}
+                </div>
+
+                <!-- House Number -->
+                <div class="mb-3">
+                    <label class="form-label">House Number</label>
+                    {{ form.house_number }}
+                </div>
+
+                <!-- Head Name -->
+                <div class="mb-3">
+                    <label class="form-label">Head Name</label>
+                    {{ form.head_name }}
+                </div>
+
+                <!--Gender-->
+                <div class="mb-3">
+                    <label class="form-label">Gender</label>
+                    {{ form.gender }}
+                </div>
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    {{ form.address }}
+                </div>
+
+                <!-- Registration Date -->
+                <div class="mb-3">
+                    <label class="form-label">Registration Date</label>
+                    {{ form.registration_date }}
+                </div>
+
+                <!-- Status -->
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    {{ form.status }}
+                </div>
+
+                <!-- Buttons -->
+                <button type="submit" class="btn btn-success">
+                    Save
+                </button>
+
+                <a href="{% url 'home' %}"
+                   class="btn btn-secondary">
+                    Back
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

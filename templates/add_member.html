@@ -1,0 +1,161 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Member</title>
+    {% comment %} <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}"> {% endcomment %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Add Member to {{ household.head_name }}</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+                {% csrf_token %}
+                {% comment %} {{ form.as_p }} {% endcomment %}
+                <div class="mb-3">
+                <label>Name</label>
+                {{ form.name }}
+            </div>
+
+            <div class="mb-3">
+                <label>Gender</label>
+                {{ form.gender }}
+            </div>
+
+            <div class="mb-3">
+                <label>Date of Birth</label>
+                {{ form.dob }}
+            </div>
+
+            <div class="mb-3">
+                <label>Phone</label>
+                {{ form.phone }}
+            </div>
+
+            <!--<div class="mb-3">
+                <label>Relationship</label>
+                {{ form.relationship }}
+            </div>-->
+
+            <div class="mb-3">
+                <label>Relationship</label>
+                {{ form.relationship }}
+            </div>
+
+            <div class="mb-3" id="customRelationshipDiv" style="display:none;">
+                <label>Custom Relationship</label>
+                {{ form.custom_relationship }}
+            </div>
+
+            <hr>
+
+            <h5>Spiritual Details</h5>
+
+            <div class="mb-3">
+                <label>Baptism Status</label>
+                {{ form.baptism_status }}
+            </div>
+
+            <div class="mb-3">
+                <label>Baptism Date</label>
+                {{ form.baptism_date }}
+            </div>
+
+            <div class="mb-3">
+                <label>Confirmation Status</label>
+                {{ form.confirmation_status }}
+            </div>
+
+            <div class="mb-3">
+                <label>Membership Status</label>
+                {{ form.membership_status }}
+            </div>
+
+            <hr>
+
+            <h5>Additional Details</h5>
+
+            <div class="mb-3">
+                <label>Qualification</label>
+                {{ form.qualification }}
+            </div>
+
+            <div class="mb-3">
+                <label>Occupation</label>
+                {{ form.occupation }}
+            </div>
+
+            <div class="mb-3">
+                <label>Marital Status</label>
+                {{ form.marital_status }}
+            </div>
+
+            <div class="mb-3">
+                <label>Blood Group</label>
+                {{ form.blood_group }}
+            </div>
+
+            <div class="mb-3">
+                <label>Skills</label>
+                {{ form.skills }}
+            </div>
+
+            <div class="mb-3">
+                <label>Remarks</label>
+                {{ form.remarks }}
+            </div>
+
+                <button type="submit" class="btn btn-success">Save</button>
+                <a href="{% url 'household_detail' household.id %}" class="btn btn-secondary">Back</a>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const relationshipField =
+        document.getElementById('id_relationship');
+
+    const customDiv =
+        document.getElementById('customRelationshipDiv');
+
+    function toggleCustomField() {
+
+        if (relationshipField.value === 'Other') {
+
+            customDiv.style.display = 'block';
+
+        } else {
+
+            customDiv.style.display = 'none';
+
+        }
+    }
+
+    toggleCustomField();
+
+    relationshipField.addEventListener(
+        'change',
+        toggleCustomField
+    );
+
+});
+
+</script>
+</body>
+</html>

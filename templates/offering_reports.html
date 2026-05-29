@@ -1,0 +1,858 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<style>
+
+body{
+
+    background: #f5f7fb;
+
+    font-family: 'Segoe UI', sans-serif;
+
+}
+
+/* =========================================
+   PAGE WRAPPER
+========================================= */
+
+.main-content{
+
+    padding: 25px;
+
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.page-header{
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+}
+
+.page-title{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+.page-title h2{
+
+    font-weight: 700;
+
+    margin: 0;
+
+    color: #1e1b4b;
+
+}
+
+.page-icon{
+
+    width: 52px;
+
+    height: 52px;
+
+    border-radius: 50%;
+
+    background: #ede9fe;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 24px;
+
+    color: #4f46e5;
+
+}
+
+/* =========================================
+   FILTER BOX
+========================================= */
+
+.filter-box{
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    margin-bottom: 25px;
+
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+
+}
+
+.filter-box label{
+
+    font-weight: 600;
+
+    margin-bottom: 8px;
+
+    color: #1e293b;
+
+}
+
+.form-control,
+.form-select{
+
+    height: 50px;
+
+    border-radius: 14px;
+
+    border: 1px solid #dbe1ea;
+
+    padding-left: 15px;
+
+    font-size: 15px;
+
+    transition: 0.3s;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    border-color: #4f46e5;
+
+    box-shadow: 0 0 0 0.15rem rgba(79,70,229,.15);
+
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn{
+
+    border-radius: 12px;
+
+    padding: 10px 20px;
+
+    font-weight: 600;
+
+    border: none;
+
+}
+
+.btn-filter{
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    color: white;
+
+}
+
+.btn-reset{
+
+    background: #f1f5f9;
+
+    color: #334155;
+
+}
+
+.btn-danger{
+
+    background: linear-gradient(
+        135deg,
+        #ef4444,
+        #dc2626
+    );
+
+}
+
+.btn-success{
+
+    background: linear-gradient(
+        135deg,
+        #16a34a,
+        #15803d
+    );
+
+}
+
+.btn-dark{
+
+    background: linear-gradient(
+        135deg,
+        #312e81,
+        #1e1b4b
+    );
+
+}
+
+/* =========================================
+   TOTAL BOX
+========================================= */
+
+.total-box{
+
+    background: linear-gradient(
+        135deg,
+        #f0fdf4,
+        #ecfdf5
+    );
+
+    border: 1px solid #bbf7d0;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    margin-bottom: 25px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+.total-left{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+}
+
+.total-icon{
+
+    width: 70px;
+
+    height: 70px;
+
+    border-radius: 50%;
+
+    background: #dcfce7;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 32px;
+
+    color: #16a34a;
+
+}
+
+.total-text h5{
+
+    margin-bottom: 5px;
+
+    color: #15803d;
+
+    font-weight: 700;
+
+}
+
+.total-text h2{
+
+    margin: 0;
+
+    font-size: 42px;
+
+    font-weight: bold;
+
+    color: #111827;
+
+}
+
+/* =========================================
+   EXPORT BUTTONS
+========================================= */
+
+.export-buttons{
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+
+}
+
+/* =========================================
+   TABLE WRAPPER
+========================================= */
+
+.table-wrapper{
+
+    background: white;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+
+}
+
+.table{
+
+    margin-bottom: 0;
+
+}
+
+.table thead{
+
+    background: linear-gradient(
+        135deg,
+        #5b52d6,
+        #4338ca
+    );
+
+    color: white;
+
+}
+
+.table thead th{
+
+    padding: 20px;
+
+    text-align: center;
+
+    border: none;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+}
+
+.table tbody td{
+
+    padding: 18px;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    border-color: #f1f5f9;
+
+}
+
+.table tbody tr:hover{
+
+    background: #f8fafc;
+
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state{
+
+    padding: 70px 20px;
+
+    text-align: center;
+
+}
+
+.empty-state img{
+
+    width: 130px;
+
+    margin-bottom: 20px;
+
+    opacity: 0.7;
+
+}
+
+.empty-state h4{
+
+    color: #312e81;
+
+    font-weight: 700;
+
+}
+
+.empty-state p{
+
+    color: #64748b;
+
+}
+
+/* =========================================
+   PRINT
+========================================= */
+
+@media print {
+
+    .btn,
+    form,
+    .no-print {
+
+        display: none !important;
+
+    }
+
+}
+
+</style>
+
+<div class="main-content">
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <a href="javascript:history.back()"
+           class="btn btn-filter">
+
+            ← Back
+
+        </a>
+
+        <div class="page-title">
+
+            <div class="page-icon">
+
+                🎁
+
+            </div>
+
+            <h2>
+
+                Offering Reports
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <!-- FILTER BOX -->
+
+    <div class="filter-box no-print">
+
+        <form method="GET">
+
+            <div class="row">
+
+                <!-- FROM DATE -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label>From Date</label>
+
+                    <input type="date"
+                           name="from_date"
+                           class="form-control"
+                           value="{{ request.GET.from_date }}">
+
+                </div>
+
+                <!-- TO DATE -->
+
+                <div class="col-md-3 mb-3">
+
+                    <label>To Date</label>
+
+                    <input type="date"
+                           name="to_date"
+                           class="form-control"
+                           value="{{ request.GET.to_date }}">
+
+                </div>
+
+                <!-- MONTH -->
+
+                <div class="col-md-2 mb-3">
+
+                    <label>Month</label>
+
+                    <input type="number"
+                           name="month"
+                           min="1"
+                           max="12"
+                           class="form-control"
+                           placeholder="Month"
+                           value="{{ request.GET.month }}">
+
+                </div>
+
+                <!-- YEAR -->
+
+                <div class="col-md-2 mb-3">
+
+                    <label>Year</label>
+
+                    <input type="number"
+                           name="year"
+                           class="form-control"
+                           placeholder="Year"
+                           value="{{ request.GET.year }}">
+
+                </div>
+
+                <!-- CATEGORY -->
+
+                <div class="col-md-2 mb-3">
+
+                    <label>Offering Type</label>
+
+                    <select name="category"
+                            class="form-select">
+
+                        <option value="">
+                            All Types
+                        </option>
+
+                        {% for category in categories %}
+
+                        <option value="{{ category.id }}"
+                            {% if request.GET.category == category.id|stringformat:"s" %}
+                                selected
+                            {% endif %}>
+
+                            {{ category.name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <!-- BUTTONS -->
+
+                <div class="col-md-12 d-flex gap-2 mt-2">
+
+                    <button type="submit"
+                            class="btn btn-filter">
+
+                        🔍 Filter
+
+                    </button>
+
+                    <a href="{% url 'offering_reports' %}"
+                       class="btn btn-reset">
+
+                        ↻ Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- TOTAL BOX -->
+
+    <div class="total-box">
+
+        <div class="total-left">
+
+            <div class="total-icon">
+
+                ₹
+
+            </div>
+
+            <div class="total-text">
+
+                <h5>Total Offering</h5>
+
+                <h2>₹ {{ total_amount }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- EXPORT BUTTONS -->
+
+    <div class="export-buttons no-print">
+
+        <button onclick="downloadPDF()"
+                class="btn btn-danger">
+
+            📄 Export PDF
+
+        </button>
+
+        <button onclick="exportTableToExcel('reportTable', 'offering_report')"
+                class="btn btn-success">
+
+            📗 Export Excel
+
+        </button>
+
+        <button onclick="printReport()"
+                class="btn btn-dark">
+
+            🖨 Print
+
+        </button>
+
+    </div>
+
+    <!-- TABLE -->
+
+    <div class="table-wrapper">
+
+        <div class="table-responsive">
+
+            <table class="table"
+                   id="reportTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>📅 Date</th>
+                        <th>🎁 Offering Type</th>
+                        <th>₹ Amount</th>
+                        <th>👤 Given By</th>
+                        <th>💳 Mode</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for offering in offerings %}
+
+                    <tr>
+
+                        <td>
+                            {{ offering.service_date }}
+                        </td>
+
+                        <td>
+                            {{ offering.category }}
+                        </td>
+
+                        <td>
+                            ₹ {{ offering.amount }}
+                        </td>
+
+                        <td>
+                            {{ offering.given_by|default:"-" }}
+                        </td>
+
+                        <td>
+                            {{ offering.payment_method }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5">
+
+                            <div class="empty-state">
+
+                                <img src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png">
+
+                                <h4>No records found</h4>
+
+                                <p>
+
+                                    Try adjusting your filters
+                                    to see results.
+
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- XLSX -->
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<!-- PDF -->
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable"></script>
+
+<!-- EXCEL EXPORT -->
+
+<script>
+
+function exportTableToExcel(tableID, filename = '') {
+
+    let table = document.getElementById(tableID);
+
+    let workbook = XLSX.utils.table_to_book(table, {
+
+        sheet: "Offering Report"
+
+    });
+
+    filename = filename
+        ? filename + ".xlsx"
+        : "report.xlsx";
+
+    XLSX.writeFile(workbook, filename);
+
+}
+
+</script>
+
+<!-- PDF -->
+
+<script>
+
+async function downloadPDF() {
+
+    const { jsPDF } = window.jspdf;
+
+    let doc = new jsPDF();
+
+    doc.setFontSize(18);
+
+    doc.text("Offering Report", 14, 20);
+
+    doc.autoTable({
+
+        html: '#reportTable',
+
+        startY: 30,
+
+        theme: 'grid',
+
+        headStyles: {
+
+            fillColor: [67, 56, 202]
+
+        },
+
+        styles: {
+
+            fontSize: 10
+
+        }
+
+    });
+
+    doc.save("offering_report.pdf");
+
+}
+
+</script>
+
+<!-- PRINT -->
+
+<script>
+
+function printReport() {
+
+    let tableContent =
+        document.getElementById(
+            "reportTable"
+        ).outerHTML;
+
+    let printWindow =
+        window.open(
+            '',
+            '',
+            'width=900,height=700'
+        );
+
+    printWindow.document.write(`
+
+        <html>
+
+        <head>
+
+            <title>Print Report</title>
+
+            <style>
+
+                body{
+                    font-family: Arial;
+                    padding:20px;
+                }
+
+                table{
+                    width:100%;
+                    border-collapse: collapse;
+                }
+
+                th, td{
+                    border:1px solid #000;
+                    padding:8px;
+                    text-align:center;
+                }
+
+                th{
+                    background:#4338ca;
+                    color:white;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <h2>Offering Report</h2>
+
+            ${tableContent}
+
+        </body>
+
+        </html>
+
+    `);
+
+    printWindow.document.close();
+
+    printWindow.print();
+
+}
+
+</script>
+
+{% endblock %}

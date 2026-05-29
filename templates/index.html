@@ -1,0 +1,1133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Church CMS Dashboard</title>
+
+    
+
+
+    <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Poppins',sans-serif;
+            background:#f5f7fb;
+            overflow-x:hidden;
+        }
+
+        
+
+        /* ================= SIDEBAR ================= */
+
+            .sidebar{
+                width:260px;
+                height:100vh;
+                position:fixed;
+                left:-260px;   /* HIDDEN INITIALLY */
+                top:0;
+                background:#111827;
+                padding:25px 15px;
+                z-index:1000;
+                transition:0.3s;
+            }
+
+            .sidebar.active{
+                left:0;
+            }
+
+        .logo{
+            color:white;
+            font-size:24px;
+            font-weight:700;
+            margin-bottom:40px;
+        }
+
+        .sidebar .nav-link{
+            color:#cbd5e1;
+            padding:14px 18px;
+            border-radius:12px;
+            margin-bottom:10px;
+            transition:0.3s;
+            font-weight:500;
+            display:block;
+            text-decoration:none;
+        }
+
+        .sidebar .nav-link:hover{
+            background:#1f2937;
+            color:white;
+        }
+
+        .sidebar .nav-link.active{
+            background:linear-gradient(135deg,#2563eb,#1d4ed8);
+            color:white;
+        }
+
+        .sidebar .nav-link i{
+            margin-right:10px;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+
+        .main-content{
+            margin-left:0;
+            padding:30px;
+            transition:0.3s;
+        }
+
+        .main-content.shifted{
+            margin-left:260px;
+        }
+
+        /* ================= TOPBAR ================= */
+
+        .topbar{
+            background:white;
+            padding:18px 25px;
+            border-radius:18px;
+            margin-bottom:30px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            box-shadow:0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        .search-box{
+            position:relative;
+        }
+
+        .search-box input{
+            padding-left:40px;
+            border-radius:12px;
+            border:none;
+            background:#f1f5f9;
+            height:45px;
+            width:260px;
+        }
+
+        .search-box i{
+            position:absolute;
+            left:14px;
+            top:12px;
+            color:#64748b;
+        }
+
+        .profile-box{
+            display:flex;
+            align-items:center;
+            gap:15px;
+        }
+
+        .profile-box img{
+            width:45px;
+            height:45px;
+            border-radius:50%;
+        }
+
+        /* ================= STAT CARDS ================= */
+
+        .stat-card{
+            padding:25px;
+            border-radius:20px;
+            color:white;
+            position:relative;
+            overflow:hidden;
+            box-shadow:0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h6{
+            font-size:15px;
+            opacity:0.9;
+        }
+
+        .stat-card h2{
+            font-size:34px;
+            margin-top:10px;
+            font-weight:700;
+        }
+
+        .stat-card i{
+            font-size:55px;
+            opacity:0.2;
+            position:absolute;
+            right:20px;
+            bottom:10px;
+        }
+
+        .bg-blue{
+            background:linear-gradient(135deg,#3b82f6,#2563eb);
+        }
+
+        .bg-green{
+            background:linear-gradient(135deg,#10b981,#059669);
+        }
+
+        .bg-red{
+            background:linear-gradient(135deg,#ef4444,#dc2626);
+        }
+
+        .bg-purple{
+            background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+        }
+
+        .custom-card{
+            background:white;
+            border-radius:20px;
+            padding:25px;
+            box-shadow:0 5px 25px rgba(0,0,0,0.05);
+            margin-bottom:25px;
+        }
+
+        .form-control,
+        .form-select{
+            height:50px;
+            border-radius:12px;
+            border:1px solid #e2e8f0;
+        }
+
+        .btn-primary{
+            border-radius:12px;
+            padding:12px 20px;
+            font-weight:500;
+        }
+
+        .table{
+            vertical-align:middle;
+        }
+
+        .table thead{
+            background:#f8fafc;
+        }
+
+        .table thead th{
+            border:none;
+            padding:18px;
+            color:#475569;
+            font-weight:600;
+        }
+
+        .table tbody td{
+            padding:18px;
+            border-color:#f1f5f9;
+        }
+
+        .badge-status{
+            padding:8px 14px;
+            border-radius:20px;
+            font-size:12px;
+        }
+
+        canvas{
+            width:100% !important;
+            height:320px !important;
+        }
+
+        .logout-btn{
+            width:100%;
+            border:none;
+            background:none;
+            text-align:left;
+            cursor:pointer;
+        }
+
+
+
+        /* ================= LOGO ================= */
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:35px;
+    overflow:hidden;
+}
+
+.logo-image-wrapper{
+    width:55px;
+    height:55px;
+    min-width:55px;
+    border-radius:50%;
+    overflow:hidden;
+    background:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border:2px solid rgba(255,255,255,0.2);
+}
+
+.sidebar-logo{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.default-logo{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:#2563eb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:24px;
+}
+
+.logo-text{
+    color:white;
+    font-size:22px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+
+.profile-image{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #e5e7eb;
+}
+
+        @media(max-width:992px){
+
+            .sidebar{
+                width:100%;
+                height:auto;
+                position:relative;
+            }
+
+            .main-content{
+                margin-left:0;
+            }
+
+            .topbar{
+                flex-direction:column;
+                gap:15px;
+                align-items:flex-start;
+            }
+
+            .search-box input{
+                width:100%;
+            }
+
+
+
+           /* ================= LOGO ================= */
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:35px;
+    overflow:hidden;
+}
+
+
+
+            
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+     {% comment %} <div class="logo">
+        <i class="bi bi-building"></i> Church CMS
+    </div>  {% endcomment %}
+
+    <div class="logo">
+
+    {% if site_settings and site_settings.church_logo %}
+
+        <div class="logo-image-wrapper">
+
+            <img src="{{ site_settings.church_logo.url }}"
+                 alt="Church Logo"
+                 class="sidebar-logo">
+
+        </div>
+
+    {% else %}
+
+        <div class="default-logo">
+
+            <i class="bi bi-building"></i>
+
+        </div>
+
+    {% endif %}
+
+    <span class="logo-text">
+
+        {% if site_settings %}
+            {{ site_settings.church_name }}
+        {% else %}
+            Church CMS
+        {% endif %}
+
+    </span>
+
+</div>
+
+
+    <nav class="nav flex-column">
+
+        <a href="#" class="nav-link active">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+        </a>
+
+        <a href="{% url 'add_household' %}" class="nav-link">
+            <i class="bi bi-house"></i>
+            Households
+        </a>
+
+        <a href="{% url 'birth_list' %}" class="nav-link">
+            <i class="bi bi-heart"></i>
+            Birth Records
+        </a>
+
+        
+        <a href="{% url 'offering_list' %}" class="nav-link">
+
+             <i class="bi bi-cash-stack"></i>
+
+
+            <span>Offerings</span>
+
+        </a>
+
+
+        <a href="{% url 'offering_reports' %}" class="nav-link">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            Offering Reports
+
+        </a>
+
+
+         <a href="{% url 'expenditure_list' %}" class="nav-link">
+
+            <i class="fas fa-money-bill-wave"></i>
+
+            <span>Expenditures</span>
+            
+        </a>
+
+
+        <a href="{% url 'expenditure_reports' %}" class="nav-link">
+
+                <i class="bi bi-bar-chart-line"></i>
+
+                Expenditure Reports
+
+        </a>
+       
+
+        <a href="{% url 'death_list' %}" class="nav-link">
+            <i class="bi bi-heartbreak"></i>
+            Death Records
+        </a>
+
+        <a href="{% url 'reports_page' %}" class="nav-link">
+            <i class="bi bi-bar-chart"></i>
+            Reports
+        </a>
+
+
+        <!--bank Reports-->
+        <a href="{% url 'bank_list' %}" class="nav-link">
+
+                <i class="bi bi-bank"></i>
+
+                Bank
+
+            </a>
+
+
+            <a href="{% url 'bank_reports' %}" class="nav-link">
+
+                <i class="bi bi-bar-chart-line"></i>
+
+                Bank Reports
+
+            </a>
+
+        <!-- FIXED LOGOUT -->
+
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+
+            <button type="submit"
+                    class="nav-link logout-btn">
+
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+
+            </button>
+        </form>
+
+    </nav>
+
+</div>
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<div class="main-content">
+
+{% if messages %}
+
+    {% for message in messages %}
+
+        <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4">
+
+            {{ message }}
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+
+    {% endfor %}
+
+{% endif %}
+
+{% block content %}
+    <!-- ================= TOPBAR ================= -->
+
+    <div class="topbar">
+
+        <button id="toggleSidebar"
+        class="btn btn-dark mb-3">
+
+    <i class="bi bi-list"></i>
+
+        </button>
+
+        <div>
+            <h3 class="fw-bold mb-1">Dashboard</h3>
+
+            <small class="text-muted">
+                Welcome to Church Management System
+            </small>
+        </div>
+
+        <div class="profile-box">
+
+            <div class="search-box">
+
+                <i class="bi bi-search"></i>
+
+                <input type="text" placeholder="Search...">
+
+            </div>
+
+          {% if site_settings and site_settings.church_logo %}
+
+    <img src="{{ site_settings.church_logo.url }}"
+         alt="profile"
+         class="profile-image">
+
+{% else %}
+
+    <img src="https://i.pravatar.cc/100"
+         alt="profile"
+         class="profile-image">
+
+{% endif %}
+
+            
+        </div>
+
+    </div>
+
+    <!-- ================= STATISTICS ================= -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stat-card bg-blue">
+
+                <h6>Total Members</h6>
+
+                <h2>{{ total_members }}</h2>
+
+                <i class="bi bi-people-fill"></i>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stat-card bg-green">
+
+                <h6>Total Households</h6>
+
+                <h2>{{ total_households }}</h2>
+
+                <i class="bi bi-house-fill"></i>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stat-card bg-purple">
+
+                <h6>Baptized</h6>
+
+                <h2>{{ baptized }}</h2>
+
+                <i class="bi bi-droplet-fill"></i>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="stat-card bg-red">
+
+                <h6>Deceased</h6>
+               
+
+                <h2>{{ deceased_count }}</h2>
+
+                <i class="bi bi-heartbreak-fill"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= CHARTS ================= -->
+
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <div class="custom-card">
+
+                <h5 class="fw-bold mb-4">
+                    Member Statistics
+                </h5>
+
+                <canvas id="memberChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="custom-card">
+
+                <h5 class="fw-bold mb-4">
+                    Gender Distribution
+                </h5>
+
+                <canvas id="genderChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="row g-4 mb-4">
+
+    <div class="col-lg-4 col-md-6">
+
+        <div class="stat-card bg-green">
+
+            <h6>This Month Offering</h6>
+
+            <h2>₹ {{ current_month_offering }}</h2>
+
+            <i class="bi bi-cash-stack"></i>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4 col-md-6">
+
+        <div class="stat-card bg-red">
+
+            <h6>This Month Expense</h6>
+
+            <h2>₹ {{ current_month_expense }}</h2>
+
+            <i class="bi bi-wallet2"></i>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4 col-md-6">
+
+        <div class="stat-card bg-blue">
+
+            <h6>Current Bank Balance</h6>
+
+            <h2>₹ {{ current_bank_balance }}</h2>
+
+            <i class="bi bi-bank"></i>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<!-- ================= SEARCH & FILTER ================= -->
+
+<div class="custom-card">
+
+    <form method="GET" class="row g-3">
+
+        <!-- SEARCH -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Search name / locality / phone"
+                value="{{ request.GET.search }}"
+            >
+
+        </div>
+
+        <!-- GENDER -->
+
+        <div class="col-lg-2 col-md-6">
+
+            <select
+                name="gender"
+                class="form-select"
+            >
+
+                <option value="">
+                    All Gender
+                </option>
+
+                <option value="Male">
+                    Male
+                </option>
+
+                <option value="Female">
+                    Female
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- BAPTISM -->
+
+        <div class="col-lg-2 col-md-6">
+
+            <select
+                name="baptism"
+                class="form-select"
+            >
+
+                <option value="">
+                    Baptism Status
+                </option>
+
+                <option value="Yes">
+                    Baptized
+                </option>
+
+                <option value="No">
+                    Non Baptized
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- AGE -->
+
+        <div class="col-lg-2 col-md-6">
+
+            <select
+                name="age"
+                class="form-select"
+            >
+
+                <option value="">
+                    Age Group
+                </option>
+
+                <option value="below_14">
+                    Below 14
+                </option>
+
+                <option value="below_18">
+                    Below 18
+                </option>
+
+                <option value="above_18">
+                    Above 18
+                </option>
+
+            </select>
+
+        </div>
+
+        <!-- FILTER BUTTON -->
+
+        <div class="col-lg-2 col-md-6">
+
+            <button
+                type="submit"
+                class="btn btn-primary w-100"
+            >
+                Apply
+            </button>
+
+        </div>
+
+        <!-- RESET -->
+
+        <div class="col-lg-1 col-md-6">
+
+            <a href="{% url 'home' %}"
+               class="btn btn-secondary w-100">
+
+                Reset
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+    <!-- ================= HOUSEHOLD TABLE ================= -->
+
+    <div class="custom-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h5 class="fw-bold">
+                Household Records
+            </h5>
+
+            <div class="d-flex gap-2">
+
+                <a href="{% url 'add_household' %}"
+                   class="btn btn-primary">
+
+                    <i class="bi bi-plus-circle"></i>
+                    Add Household
+
+                </a>
+
+                <a href="{% url 'reports_page' %}"
+                   class="btn btn-dark">
+
+                    <i class="bi bi-file-earmark-bar-graph"></i>
+                    Reports
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Head Name</th>
+                        <th>Locality</th>
+                        <th>House No</th>
+                        <th>Status</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for h in households %}
+
+                    <tr>
+
+                        <td>
+                            <strong>#{{ h.id }}</strong>
+                        </td>
+
+                        <td>{{ h.head_name }}</td>
+
+                        <td>{{ h.locality }}</td>
+
+                        <td>{{ h.house_number }}</td>
+
+                        <td>
+
+                            <span class="badge bg-success badge-status">
+                                {{ h.status }}
+                            </span>
+
+                        </td>
+
+
+                        <td class="d-flex gap-2">
+
+    <!-- VIEW -->
+
+                                <a href="{% url 'household_detail' h.id %}"
+                                class="btn btn-sm btn-primary">
+
+                                    <i class="bi bi-eye"></i>
+
+                                </a>
+
+                                <!-- EDIT -->
+
+                                <a href="{% url 'edit_household' h.id %}"
+                                class="btn btn-sm btn-warning">
+
+                                    <i class="bi bi-pencil-square"></i>
+
+                                </a>
+
+                                <!-- DELETE -->
+
+                                <form method="POST"
+                                    action="{% url 'delete_household' h.id %}">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Delete this household?')">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        <!--<td>
+
+                            <a href="{% url 'household_detail' h.id %}"
+                               class="btn btn-sm btn-primary">
+
+                                <i class="bi bi-eye"></i>
+                                View
+
+                            </a>
+
+                        </td>-->
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="6" class="text-center py-5">
+
+                            <div class="text-muted">
+
+                                <i class="bi bi-database fs-1"></i>
+
+                                <p class="mt-2">
+                                    No household records found
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ================= CHARTS ================= -->
+
+<script>
+
+    // MEMBER CHART
+
+    const memberChart = document.getElementById('memberChart');
+
+    new Chart(memberChart, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: [
+                'Members',
+                'Households',
+                'Baptized',
+                'Non Baptized',
+                'Deaths'
+            ],
+
+            datasets: [{
+
+                label: 'Church Statistics',
+
+                data: [
+                    {{ total_members }},
+                    {{ total_households }},
+                    {{ baptized }},
+                    {{ not_baptized }},
+                    {{ deceased_count }}
+                ],
+
+                borderWidth: 1,
+                borderRadius: 10
+
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+
+    });
+
+    // GENDER CHART
+
+    const genderChart = document.getElementById('genderChart');
+
+    new Chart(genderChart, {
+
+        type: 'doughnut',
+
+        data: {
+
+            labels: [
+                'Male',
+                'Female'
+            ],
+
+            datasets: [{
+
+                data: [
+                    {{ male_count }},
+                    {{ female_count }}
+                ],
+
+                borderWidth: 1
+
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+
+    });
+
+</script>
+<footer class="text-center mt-5 text-muted">
+    <small>Church Management System © 2026</small>
+</footer>
+
+</body>
+
+<script>
+
+    const sidebar =
+        document.querySelector('.sidebar');
+
+    const mainContent =
+        document.querySelector('.main-content');
+
+    const toggleBtn =
+        document.getElementById('toggleSidebar');
+
+    toggleBtn.addEventListener('click', () => {
+
+        sidebar.classList.toggle('active');
+
+        mainContent.classList.toggle('shifted');
+
+    });
+
+</script>
+
+</html>

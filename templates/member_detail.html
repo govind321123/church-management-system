@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Detail</title>
+
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+            <h3>{{ member.name }}</h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <h5>Personal Information</h5>
+
+                    <p><strong>Gender:</strong> {{ member.gender }}</p>
+
+                    <p><strong>Date of Birth:</strong> {{ member.dob }}</p>
+
+                    <p><strong>Age:</strong> {{ member.age }}</p>
+
+                    <p><strong>Phone:</strong> {{ member.phone }}</p>
+
+                    <p><strong>Relationship:</strong> {{ member.relationship }}</p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <h5>Spiritual Information</h5>
+
+                    <p>
+                        <strong>Baptism:</strong>
+
+                        {% if member.baptism_status %}
+                            <span class="badge bg-success">
+                                Baptized
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger">
+                                Not Baptized
+                            </span>
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        <strong>Confirmation:</strong>
+
+                        {% if member.confirmation_status %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        <strong>Membership:</strong>
+                        {{ member.membership_status }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <h5>Household Information</h5>
+
+            <p>
+                <strong>Head of Family:</strong>
+                {{ member.household.head_name }}
+            </p>
+
+            <p>
+                <strong>Locality:</strong>
+                {{ member.household.locality }}
+            </p>
+
+            <p>
+                <strong>House Number:</strong>
+                {{ member.household.house_number }}
+            </p>
+
+            <hr>
+
+            <h5>Additional Information</h5>
+
+            <p><strong>Qualification:</strong> {{ member.qualification }}</p>
+
+            <p><strong>Occupation:</strong> {{ member.occupation }}</p>
+
+            <p><strong>Blood Group:</strong> {{ member.blood_group }}</p>
+
+            <p><strong>Skills:</strong> {{ member.skills }}</p>
+
+            <p><strong>Remarks:</strong> {{ member.remarks }}</p>
+
+            <hr>
+
+            <a href="{% url 'household_detail' member.household.id %}"
+               class="btn btn-secondary">
+
+                Back to Household
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

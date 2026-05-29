@@ -1,0 +1,547 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<style>
+
+@media print {
+
+    .btn,
+    form,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+    }
+
+}
+
+.custom-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
+}
+
+.summary-card h6 {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.summary-card h2 {
+    font-weight: bold;
+}
+
+</style>
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE HEADER -->
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+
+        <div>
+
+            <h2 class="mb-1">
+                Bank Reports
+            </h2>
+
+            <p class="text-muted mb-0">
+                Filter and analyze bank transactions
+            </p>
+
+        </div>
+
+        <!-- ACTION BUTTONS -->
+
+        <div class="d-flex flex-wrap gap-2 no-print">
+
+            <!-- Back Button -->
+
+            <a href="javascript:history.back()"
+               class="btn btn-secondary">
+
+                ← Back
+
+            </a>
+
+            <!-- Print -->
+
+            <button onclick="printReport()"
+                    class="btn btn-dark">
+
+                Print
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- FILTER SECTION -->
+
+    <div class="custom-card mb-4 no-print">
+
+        <form method="GET">
+
+            <div class="row g-3">
+
+                <!-- REPORT TYPE -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Report Type
+                    </label>
+
+                    <select name="report_type"
+                            class="form-select">
+
+                        <option value="">
+                            Select Report
+                        </option>
+
+                        <option value="statement">
+                            Bank Statement
+                        </option>
+
+                        <option value="summary">
+                            Balance Summary
+                        </option>
+
+                        <option value="comparison">
+                            Deposit vs Withdrawal
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- ACCOUNT -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Bank Account
+                    </label>
+
+                    <select name="account"
+                            class="form-select">
+
+                        <option value="">
+                            All Accounts
+                        </option>
+
+                        {% for account in accounts %}
+
+                        <option value="{{ account.id }}"
+                            {% if selected_account == account.id|stringformat:"s" %}
+                                selected
+                            {% endif %}>
+
+                            {{ account.account_name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <!-- TRANSACTION TYPE -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Transaction Type
+                    </label>
+
+                    <select name="transaction_type"
+                            class="form-select">
+
+                        <option value="">
+                            All Transactions
+                        </option>
+
+                        <option value="DEPOSIT"
+                            {% if selected_transaction_type == 'DEPOSIT' %}
+                                selected
+                            {% endif %}>
+
+                            Deposits
+
+                        </option>
+
+                        <option value="WITHDRAWAL"
+                            {% if selected_transaction_type == 'WITHDRAWAL' %}
+                                selected
+                            {% endif %}>
+
+                            Withdrawals
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <!-- FILTER BUTTON -->
+
+            <div class="mt-4">
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Generate Report
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-3 mb-3">
+
+            <div class="custom-card summary-card">
+
+                <h6>Total Deposits</h6>
+
+                <h2 class="text-success">
+                    ₹ {{ total_deposits }}
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <div class="custom-card summary-card">
+
+                <h6>Total Withdrawals</h6>
+
+                <h2 class="text-danger">
+                    ₹ {{ total_withdrawals }}
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <div class="custom-card summary-card">
+
+                <h6>Current Balance</h6>
+
+                <h2 class="text-primary">
+                    ₹ {{ current_balance }}
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <div class="custom-card summary-card">
+
+                <h6>Total Records</h6>
+
+                <h2>
+                    {{ total_records }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- EXPORT BUTTONS -->
+
+    <div class="d-flex flex-wrap gap-2 mb-4 no-print">
+
+        <!-- PDF -->
+
+        <button onclick="downloadPDF()"
+                class="btn btn-danger">
+
+            Export PDF
+
+        </button>
+
+        <!-- EXCEL -->
+
+        <button onclick="exportTableToExcel('reportTable', 'bank_report')"
+                class="btn btn-success">
+
+            Export Excel
+
+        </button>
+
+        <!-- PRINT -->
+
+        <button onclick="printReport()"
+                class="btn btn-dark">
+
+            Print Report
+
+        </button>
+
+    </div>
+
+    <!-- TRANSACTION TABLE -->
+
+    <div class="custom-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="mb-0">
+                Transaction Records
+            </h5>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle"
+                   id="reportTable">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Date</th>
+                        <th>Bank Account</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Source</th>
+                        <th>Purpose</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for transaction in transactions %}
+
+                    <tr>
+
+                        <td>
+                            {{ transaction.date }}
+                        </td>
+
+                        <td>
+                            {{ transaction.bank_account }}
+                        </td>
+
+                        <td>
+
+                            {% if transaction.transaction_type == 'DEPOSIT' %}
+
+                                <span class="badge bg-success">
+
+                                    Deposit
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger">
+
+                                    Withdrawal
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td class="fw-bold">
+                            ₹ {{ transaction.amount }}
+                        </td>
+
+                        <td>
+                            {{ transaction.source }}
+                        </td>
+
+                        <td>
+                            {{ transaction.purpose }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="6"
+                            class="text-center text-muted py-4">
+
+                            No transactions found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- XLSX LIBRARY -->
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<!-- PDF LIBRARIES -->
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable"></script>
+
+<!-- EXCEL EXPORT -->
+
+<script>
+
+function exportTableToExcel(tableID, filename = '') {
+
+    let table = document.getElementById(tableID);
+
+    let workbook = XLSX.utils.table_to_book(table, {
+        sheet: "Bank Report"
+    });
+
+    filename = filename ? filename + ".xlsx" : "report.xlsx";
+
+    XLSX.writeFile(workbook, filename);
+
+}
+
+</script>
+
+<!-- PDF EXPORT -->
+
+<script>
+
+async function downloadPDF() {
+
+    const { jsPDF } = window.jspdf;
+
+    let doc = new jsPDF();
+
+    doc.setFontSize(18);
+
+    doc.text("Bank Report", 14, 20);
+
+    doc.autoTable({
+
+        html: '#reportTable',
+
+        startY: 30,
+
+        theme: 'grid',
+
+        headStyles: {
+            fillColor: [52, 58, 64]
+        },
+
+        styles: {
+            fontSize: 10
+        }
+
+    });
+
+    doc.save("bank_report.pdf");
+
+}
+
+</script>
+
+<!-- PRINT REPORT -->
+
+<script>
+
+function printReport() {
+
+    let tableContent =
+        document.getElementById("reportTable").outerHTML;
+
+    let printWindow =
+        window.open('', '', 'width=900,height=700');
+
+    printWindow.document.write(`
+
+        <html>
+
+        <head>
+
+            <title>Print Report</title>
+
+            <style>
+
+                body{
+                    font-family: Arial;
+                    padding:20px;
+                }
+
+                table{
+                    width:100%;
+                    border-collapse: collapse;
+                }
+
+                th, td{
+                    border:1px solid #000;
+                    padding:8px;
+                    text-align:left;
+                }
+
+                th{
+                    background:#343A40;
+                    color:white;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <h2>Bank Report</h2>
+
+            ${tableContent}
+
+        </body>
+
+        </html>
+
+    `);
+
+    printWindow.document.close();
+
+    printWindow.print();
+
+}
+
+</script>
+
+{% endblock %}

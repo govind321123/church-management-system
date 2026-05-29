@@ -1,0 +1,326 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Birth Records</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+        }
+
+        .container {
+            width: 95%;
+            margin: 40px auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .top-bar {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        .add-btn {
+
+            padding: 10px 15px;
+
+            background: #007bff;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 5px;
+        }
+
+        .add-btn:hover {
+
+            background: #0056b3;
+        }
+
+        .search-box {
+
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+
+            padding: 8px;
+
+            width: 250px;
+        }
+
+        .search-box button {
+
+            padding: 8px 12px;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            background: white;
+        }
+
+        th,
+        td {
+
+            padding: 12px;
+
+            border: 1px solid #ddd;
+
+            text-align: center;
+        }
+
+        th {
+
+            background: #28a745;
+
+            color: white;
+        }
+
+        tr:hover {
+
+            background: #f1f1f1;
+        }
+
+        .delete-btn {
+
+            color: red;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .delete-btn:hover {
+
+            color: darkred;
+        }
+
+        .yes {
+
+            color: green;
+
+            font-weight: bold;
+        }
+
+        .no {
+
+            color: red;
+
+            font-weight: bold;
+        }
+
+
+        .back-btn {
+
+            padding: 10px 15px;
+
+            background: #6c757d;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 5px;
+
+            margin-right: 10px;
+        }
+
+        .back-btn:hover {
+
+            background: #5a6268;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Birth Records</h2>
+
+    <!-- ADD BUTTON -->
+    <div class="top-bar">
+
+        <a href="javascript:history.back()" class="back-btn">
+        ← Back
+        </a>
+
+        <a href="{% url 'add_birth' %}" class="add-btn">
+
+            + Add Birth
+
+        </a>
+
+    </div>
+
+    <!-- SEARCH -->
+    <form method="GET" class="search-box">
+
+        <input
+            type="text"
+            name="q"
+            placeholder="Search name, household, parents..."
+            value="{{ query|default:'' }}"
+        >
+
+        <button type="submit">
+
+            Search
+
+        </button>
+
+    </form>
+
+    <!-- TABLE -->
+    <table>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Name</th>
+
+            <th>Household</th>
+
+            <th>Member</th>
+
+            <th>Gender</th>
+
+            <th>DOB</th>
+
+            <th>Father</th>
+
+            <th>Mother</th>
+
+            <th>Father Phone</th>
+
+            <th>Mother Phone</th>
+
+            <th>Age</th>
+
+            <th>Baptized</th>
+
+            <th>Action</th>
+
+        </tr>
+
+        {% for b in births %}
+
+        <tr>
+
+            <td>
+                {{ b.id }}
+            </td>
+
+            <td>
+                {{ b.baby_name }}
+            </td>
+
+            <td>
+                {{ b.household.head_name }}
+            </td>
+
+            <td>
+                {{ b.member.name }}
+            </td>
+
+            <td>
+                {{ b.gender }}
+            </td>
+
+            <td>
+                {{ b.dob }}
+            </td>
+
+            <td>
+                {{ b.father_name }}
+            </td>
+
+            <td>
+                {{ b.mother_name }}
+            </td>
+
+            <td>
+                {{ b.father_phone }}
+            </td>
+
+            <td>
+                {{ b.mother_phone }}
+            </td>
+
+            <td>
+                {{ b.age }}
+            </td>
+
+            <td>
+
+                {% if b.baptism_status %}
+
+                    <span class="yes">
+                        Yes
+                    </span>
+
+                {% else %}
+
+                    <span class="no">
+                        No
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                <a
+                    href="{% url 'delete_birth' b.id %}"
+                    class="delete-btn"
+                >
+
+                    Delete
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="13">
+
+                No birth records found
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+
+</html>
+
